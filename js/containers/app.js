@@ -4,6 +4,9 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { getCatFacts } from '../actions';
 
+//var insertCss = require('insert-css');
+//insertCss(require('../../stylesheets/index.styl'));
+
 
 class App extends Component {
 	constructor(props) {
@@ -41,16 +44,6 @@ class App extends Component {
 	}
 
 }
-
-// class CatFact extends Component {
-// 	render() {
-// 		return (
-// 			<div>
-// 			<div>{fact.text}</div>
-// 			</div>
-// 		)
-// 	}
-// }
 
 App.propTypes = {
 	facts: PropTypes.array.isRequired,

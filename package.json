@@ -5,23 +5,21 @@
   "author": "Char Kuperstein",
   "main": "main.js",
   "scripts": {
-    "build": "browserify -t [ babelify --presets [ react ] ] js/main.js -o app.js & browserify -t stylify stylesheets/* -o index.css",
-    "watch": "watchify -t [ babelify --presets [ react ] ] js/main.js -o app.js --debug --verbose & watchify -t stylify stylesheets/* -o index.css"
+    "build": "browserify -t [ babelify --presets [ react ] ] js/main.js -o app.js",
+    "watch": "watchify -t [ babelify --presets [ react ] ] js/main.js -o app.js --debug --verbose"
   },
   "browserify": {
     "transform": [
       [
-        "babelify",
-        {
-          "presets": [
-            "es2015"
-          ]
-        },
         "stylify",
         {
           "paths": [
             "stylesheets/*"
           ]
+        },
+        "babelify",
+        {
+          "presets": [ "es2015" ]
         }
       ]
     ]
@@ -30,6 +28,8 @@
     "babel-preset-react": "^6.23.0",
     "babelify": "^7.3.0",
     "browserify": "^14.1.0",
+    "insert-css": "^2.0.0",
+    "lessify": "^1.0.1",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-redux": "^5.0.3",
@@ -37,10 +37,10 @@
     "redux-thunk": "^2.2.0",
     "stylify": "^1.4.0",
     "stylus": "^0.54.5",
-    "watchify": "^3.9.0",
     "xml2js": "^0.4.17"
   },
   "devDependencies": {
-    "babel-preset-es2015": "^6.22.0"
+    "babel-preset-es2015": "^6.22.0",
+    "watchify": "^3.9.0"
   }
 }
