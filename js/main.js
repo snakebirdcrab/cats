@@ -1,45 +1,25 @@
 'use strict';
 
-var wfetch = require('whatwg-fetch');
-var xml2js = require('xml2js');
 
-function getCatPics() {
-	const imgUrl = 'http://mapd-cats.azurewebsites.net/catpics';
-	
-	fetch(imgUrl)
-	.then(function(resp) {
+import App from './containers/app';
+import { Provider } from 'react-redux';
+import React from 'react';
+import { render } from 'react-dom';
+import configureStore from './store';
+import { getCatFacts } from './actions';
 
-		return resp.text();
-	})
-	.then(function(resp) {
-		//console.log(resp);
 
-		xml2js.parseString(resp, function(err, result) {
-			//console.log(result);
-			console.log(result.response.data[0].images[0]);
-			return result.response.data[0].images[0];
-		});
-		
-	})
-	.catch(function(err) {
-		throw 'Sorry, no cat pics today.';
-	});
-}
 
-function getCatFacts() {
-	const factsUrl = 'http://mapd-cats.azurewebsites.net/catfacts';
+const store = configureStore();
+console.log(store.getState());
 
-	fetch(factsUrl)
-	.then(function(resp) {
-		return resp.json();
-	})
-	.then(function(resp) {
-		console.log(resp);
-	})
-	.catch(function(err) {
-		throw 'Sorry, no cat facts today.';
-	});
-}
+store.dispatch(getCatFacts());
 
-getCatPics();
-getCatFacts();
+render(
+	<Provider store={store}>
+		<App />
+	</Provider>,
+	document.getElementById('main-container')
+)
+
+
