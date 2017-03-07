@@ -4,16 +4,6 @@ import { combineReducers } from 'redux';
 import { REMOVE_CAT_FACT, REQUEST_CAT_FACTS, RECEIVE_CAT_FACTS } from './actions';
 
 
-const removeFact = (state = {}, action) => {
-
-	switch (action.type) {
-		case 'REMOVE_CAT_FACT':
-			return
-		default:
-			return state;
-	}
-};
-
 const fetchStatus = (state = {}, action) => {
 	switch (action.type) {
 		case 'REQUEST_CAT_FACTS':
@@ -26,9 +16,15 @@ const fetchStatus = (state = {}, action) => {
 }
 
 const allFacts = (state = {}, action) => {
+
 	switch (action.type) {
 		case 'REMOVE_CAT_FACT':
-			return state.facts.slice(0, action.id)
+			for (let fact of state) {
+				if (fact.id === action.fact) {
+					state.splice(state.indexOf(fact), 1);
+					return state;
+				}
+			}
 		case 'REQUEST_CAT_FACTS':
 			return []
 		case 'RECEIVE_CAT_FACTS':
@@ -39,7 +35,6 @@ const allFacts = (state = {}, action) => {
 }
 
 let reducer = combineReducers({
-	//factRemoved: removeFact,
 	fetchStatus: fetchStatus,
 	catFacts: allFacts
 })

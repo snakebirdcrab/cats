@@ -2,7 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { getCatFacts } from '../actions';
+import { getCatFacts, removeCatFact } from '../actions';
 
 //var insertCss = require('insert-css');
 //insertCss(require('../../stylesheets/index.styl'));
@@ -11,43 +11,83 @@ import { getCatFacts } from '../actions';
 class App extends Component {
 	constructor(props) {
 		super(props)
-		console.log(props);
-		//this.handleChange = this.handleChange.bind(this)
+		this.onClickRemove = this.onClickRemove.bind(this);
 	}
 
-	componentDidMount() {
-		//const { dispatch } = this.props
-		//dispatch(getCatFacts());
+	renderHeader() {
+		return (
+			<div className="header">
+				<div className="header-text">Cat Facts!</div>
+			</div>
+		)
 	}
 
 	renderCatFacts() {
-		console.log(this.props);
-		
+
 		let factComponents = this.props.facts.map(fact => {
 			return (
-				<div key={fact.id[0]}>
-					<img className="cat-img" src={fact.url[0]}/>
-					<div>{fact.text}</div>
-				</div>
+				<CatFact key={fact.id} fact={fact} callback={this.onClickRemove} />
 			)
 		})
-		console.log(factComponents);
 		return factComponents;
+	}
+
+	onClickRemove(item) {
+		const { dispatch } = this.props
+		
+		let removed = document.querySelector('[data-id="' + item.props.fact.id + '"]');
+		
+		function finishedHandler() {
+			removed.remove();
+		}
+
+		let slide = removed.animate([
+			{maxHeight: 0}
+		], 400)
+		.finished.then(finishedHandler)
+		
+		slide.onfinish = finishedHandler;
 	}
 
 	render() {
 		return (
 			<div>
+			{this.renderHeader()}
 			{this.renderCatFacts()}
 			</div>
 		)
 	}
+}
 
+class CatFact extends Component {
+	constructor(props) {
+		super(props);
+		this.onClickRemove = this.onClickRemove.bind(this);
+	}
+
+	render() {
+		return (
+			<div className="row" data-id={this.props.fact.id}>
+				<div className="row-inner">
+					<div className="img-box">
+						<img className="cat-img" src={this.props.fact.url}/>
+					</div>
+					<div className="text-box">{this.props.fact.text}</div>
+					<div className="close-button" onClick={this.onClickRemove}>X</div>
+				</div>
+			</div>
+		)
+	}
+
+	onClickRemove() {
+		this.props.callback(this);
+	}
 }
 
 App.propTypes = {
 	facts: PropTypes.array.isRequired,
-	isFetching: PropTypes.bool.isRequired
+	isFetching: PropTypes.bool.isRequired,
+	dispatch: PropTypes.func.isRequired
 }
 
 const mapStateToProps = (state = {catFacts, fetchStatus}) => ({

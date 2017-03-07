@@ -9,7 +9,7 @@ const REMOVE_CAT_FACT = 'REMOVE_CAT_FACT';
 function receiveCatFacts(json) {
 	return {
 		type: RECEIVE_CAT_FACTS,
-		facts: json.image
+		facts: json//json.image
 	}
 }
 
@@ -19,35 +19,36 @@ function requestCatFacts() {
 	}
 }
 
-function removeCatFact(fact_id) {
+export function removeCatFact(fact_id) {
 	return {
 		type: REMOVE_CAT_FACT,
 		fact: fact_id
 	}
 }
 
-var getCatPics = new Promise((resolve, reject) => {
-	const imgUrl = 'http://mapd-cats.azurewebsites.net/catpics';
-	
-	fetch(imgUrl)
-	.then(function(resp) {
-		return resp.text();
-	})
-	.then(function(resp) {
-		xml2js.parseString(resp, function(err, result) {
-			resolve(result.response.data[0].images[0]);
-		});
-	})
-	.catch(err => {
-		reject('Sorry, no cat pics today.');
-	});
-})
+// var getCatPics = new Promise((resolve, reject) => {
+// 	//const imgUrl = 'http://mapd-cats.azurewebsites.net/catpics';
+// 	const imgUrl = 'https://unsplash.it/200/100';
+// 	fetch(imgUrl)
+// 	.then(function(resp) {
+// 		return resp.text();
+// 	})
+// 	.then(function(resp) {
+// 		xml2js.parseString(resp, function(err, result) {
+// 			resolve(result.response.data[0].images[0]);
+// 		});
+// 	})
+// 	.catch(err => {
+// 		reject('Sorry, no cat pics today.');
+// 	});
+// })
 
 var getCatText = new Promise((resolve, reject) => {
 	const factsUrl = 'http://mapd-cats.azurewebsites.net/catfacts';
 
 	fetch(factsUrl)
 	.then(function(resp) {
+		console.log(resp);
 		return resp.json();
 	})
 	.then(function(json) {		
@@ -64,13 +65,21 @@ export function getCatFacts() {
 
 	return dispatch => {
 		dispatch(requestCatFacts());
-		return Promise.all([getCatText, getCatPics])
+		return Promise.all([getCatText/*, getCatPics*/])
 		.then(values => {
-			// add text to each cat fact
-			for (let [i, pic] of values[1].image.entries()) {
-				pic.text = values[0].facts[i];
+			let catFacts = [];
+			let facts = values[0].facts;
+			for (let i = 0; i < facts.length; i++) {
+				catFacts[i] = {text: facts[i], url: 'https://unsplash.it/200', id: i};
 			}
-			dispatch(receiveCatFacts(values[1]));
+			// add text to each cat fact
+			// for (let [i, pic] of values[1].image.entries()) {
+			// 	pic.id = pic.id[0];
+			// 	pic.url = pic.url[0];
+			// 	pic.source_url = pic.source_url[0];
+			// 	pic.text = values[0].facts[i];
+			// }
+			dispatch(receiveCatFacts(catFacts));
 		})
 		.catch(err => {
 			console.log(err);
