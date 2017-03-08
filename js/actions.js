@@ -5,6 +5,7 @@ import xml2js from 'xml2js';
 const REQUEST_CAT_FACTS = 'REQUEST_CAT_FACTS';
 const RECEIVE_CAT_FACTS = 'RECEIVE_CAT_FACTS';
 const REMOVE_CAT_FACT = 'REMOVE_CAT_FACT';
+const max_facts = 25;
 
 function receiveCatFacts(json) {
 	return {
@@ -26,22 +27,22 @@ export function removeCatFact(fact_id) {
 	}
 }
 
-// var getCatPics = new Promise((resolve, reject) => {
-// 	//const imgUrl = 'http://mapd-cats.azurewebsites.net/catpics';
-// 	const imgUrl = 'https://unsplash.it/200/100';
-// 	fetch(imgUrl)
-// 	.then(function(resp) {
-// 		return resp.text();
-// 	})
-// 	.then(function(resp) {
-// 		xml2js.parseString(resp, function(err, result) {
-// 			resolve(result.response.data[0].images[0]);
-// 		});
-// 	})
-// 	.catch(err => {
-// 		reject('Sorry, no cat pics today.');
-// 	});
-// })
+var getCatPics = new Promise((resolve, reject) => {
+	//const imgUrl = 'http://mapd-cats.azurewebsites.net/catpics';
+	const imgUrl = 'http://api.giphy.com/v1/gifs/search?q=funny+cat&api_key=dc6zaTOxFJmzC';
+
+	fetch(imgUrl)
+	.then(function(resp) {
+		return resp.json();
+	})
+	.then(function(json) {
+		resolve(json)
+
+	})
+	.catch(err => {
+		reject('Sorry, no cat pics today.');
+	});
+})
 
 var getCatText = new Promise((resolve, reject) => {
 	const factsUrl = 'http://mapd-cats.azurewebsites.net/catfacts';
@@ -61,24 +62,21 @@ var getCatText = new Promise((resolve, reject) => {
 
 
 export function getCatFacts() {
-	console.log('getting cat facts');
 
 	return dispatch => {
 		dispatch(requestCatFacts());
-		return Promise.all([getCatText/*, getCatPics*/])
+		return Promise.all([getCatText, getCatPics])
 		.then(values => {
 			let catFacts = [];
-			let facts = values[0].facts;
-			for (let i = 0; i < facts.length; i++) {
-				catFacts[i] = {text: facts[i], url: 'https://unsplash.it/200', id: i};
+			// parse facts + images data and combine into one array
+			for (let i = 0; i < max_facts; i++) {
+				catFacts[i] = {
+					text: values[0].facts[i],
+					url: values[1].data[i].images.downsized.url,
+					id: i
+				};
 			}
-			// add text to each cat fact
-			// for (let [i, pic] of values[1].image.entries()) {
-			// 	pic.id = pic.id[0];
-			// 	pic.url = pic.url[0];
-			// 	pic.source_url = pic.source_url[0];
-			// 	pic.text = values[0].facts[i];
-			// }
+
 			dispatch(receiveCatFacts(catFacts));
 		})
 		.catch(err => {

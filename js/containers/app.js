@@ -2,10 +2,7 @@
 
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { getCatFacts, removeCatFact } from '../actions';
-
-//var insertCss = require('insert-css');
-//insertCss(require('../../stylesheets/index.styl'));
+import { removeCatFact } from '../actions';
 
 
 class App extends Component {
@@ -16,8 +13,8 @@ class App extends Component {
 
 	renderHeader() {
 		return (
-			<div className="header">
-				<div className="header-text">Cat Facts!</div>
+			<div className="header container flex-center">
+				Cat Facts!
 			</div>
 		)
 	}
@@ -32,6 +29,7 @@ class App extends Component {
 		return factComponents;
 	}
 
+	// remove item from DOM after simple animation
 	onClickRemove(item) {
 		const { dispatch } = this.props
 		
@@ -67,7 +65,7 @@ class CatFact extends Component {
 
 	render() {
 		return (
-			<div className="row" data-id={this.props.fact.id}>
+			<div className="row fact-box" data-id={this.props.fact.id}>
 				<div className="row-inner">
 					<div className="img-box">
 						<img className="cat-img" src={this.props.fact.url}/>

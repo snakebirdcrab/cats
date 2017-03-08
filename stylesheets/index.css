@@ -5,12 +5,28 @@ html {
 body {
 	font-family: 'Helvetica';
 	font-size: 24px;
-	color: #333333;
+	color: #34495E;
 	margin: 0;
 	padding: 0;
 	border: 0;
 	outline: 0;
 	vertical-align: baseline;
+}
+
+.header {
+	font-size: 32px;
+	font-weight: 600;
+	height: 100px;
+	background: #F7DC6F;
+	border-radius: 5px;
+	margin: 20px 0px;
+	padding: 20px 0px;
+}
+
+.flex-center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 .container {
@@ -19,10 +35,13 @@ body {
 
 .row {
 	margin: 15px 0px;
+	overflow: hidden;
+}
+
+.fact-box {
 	background: #F8F9F9;
 	border-radius: 5px;
 	border: 1px solid #E5E7E9;
-	overflow: hidden;
 	max-height: 300px;
 }
 
@@ -37,11 +56,12 @@ body {
 	width: 20px;
 	height: 20px;
 	margin-right: 20px;
-	color: #333333;
+	color: #E74C3C;
 }
 
 .close-button:hover {
-	color: #999999;
+	color: #F1948A;
+	font-weight: bold;
 	cursor: pointer;
 }
 
@@ -51,6 +71,7 @@ body {
 }
 
 .text-box {
+	font-style: italic;
 	margin: 0px 20px;
 	width: 100%;
 	min-width: 600px;
