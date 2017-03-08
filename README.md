@@ -2,9 +2,9 @@
 INSTRUCTIONS FOR RUNNING CAT FACTS
 ************************************
 
-1. clone repo from 
+1. clone repo from https://github.com/snakebirdcrab/cats
 
-2. cd into catfacts/
+2. cd into cats/
 
 3. npm install
 
