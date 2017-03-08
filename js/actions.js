@@ -1,16 +1,15 @@
 'use strict';
 
-import xml2js from 'xml2js';
-
 const REQUEST_CAT_FACTS = 'REQUEST_CAT_FACTS';
 const RECEIVE_CAT_FACTS = 'RECEIVE_CAT_FACTS';
 const REMOVE_CAT_FACT = 'REMOVE_CAT_FACT';
 const max_facts = 25;
 
+
 function receiveCatFacts(json) {
 	return {
 		type: RECEIVE_CAT_FACTS,
-		facts: json//json.image
+		facts: json
 	}
 }
 
@@ -49,7 +48,6 @@ var getCatText = new Promise((resolve, reject) => {
 
 	fetch(factsUrl)
 	.then(function(resp) {
-		console.log(resp);
 		return resp.json();
 	})
 	.then(function(json) {		
